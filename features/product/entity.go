@@ -35,8 +35,8 @@ type ProductService interface {
 }
 
 type ProductData interface {
-	Add(userId uint, newProduct Core) (Core, error)
-	Update(userId, productId uint, updProduct Core) (Core, error)
+	Add(userId uint, newProduct Core, productImage *multipart.FileHeader) (Core, error)
+	Update(userId, productId uint, updProduct Core, productImage *multipart.FileHeader) (Core, error)
 	Delete(userId, productId uint) error
 	GetAllProducts() ([]Core, error)
 	GetUserProducts(userId uint) ([]Core, error)
