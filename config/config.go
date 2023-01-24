@@ -12,20 +12,22 @@ import (
 )
 
 var (
-	JWT_KEY   string = ""
-	KEYID     string = ""
-	ACCESSKEY string = ""
+	JWT_KEY           string = ""
+	KEYID             string = ""
+	ACCESSKEY         string = ""
+	MIDTRANSSERVERKEY string = ""
 )
 
 type AppConfig struct {
-	DBUser    string
-	DBPass    string
-	DBHost    string
-	DBPort    int
-	DBName    string
-	jwtKey    string
-	keyid     string
-	accesskey string
+	DBUser            string
+	DBPass            string
+	DBHost            string
+	DBPort            int
+	DBName            string
+	jwtKey            string
+	keyid             string
+	accesskey         string
+	midtransserverkey string
 }
 
 func InitConfig() *AppConfig {
@@ -35,6 +37,11 @@ func InitConfig() *AppConfig {
 func ReadEnv() *AppConfig {
 	app := AppConfig{}
 	isRead := true
+	if val, found := os.LookupEnv("MIDTRANSSERVERKEY"); found {
+		app.keyid = val
+		isRead = false
+		MIDTRANSSERVERKEY = val
+	}
 	if val, found := os.LookupEnv("KEYID"); found {
 		app.keyid = val
 		isRead = false
@@ -93,6 +100,7 @@ func ReadEnv() *AppConfig {
 		app.jwtKey = os.Getenv("JWTKEY")
 		app.keyid = os.Getenv("KEYID")
 		app.accesskey = os.Getenv("ACCESSKEY")
+		app.midtransserverkey = os.Getenv("MIDTRANSSERVERKEY")
 
 		JWT_KEY = app.jwtKey
 		KEYID = app.keyid
