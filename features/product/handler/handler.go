@@ -125,7 +125,7 @@ func (pc *productControl) GetAllProducts() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"data":    res,
+			"data":    CoreToGetProductsResp(res),
 			"message": "success show all products",
 		})
 	}
