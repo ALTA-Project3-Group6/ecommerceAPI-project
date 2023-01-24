@@ -7,13 +7,14 @@ import (
 )
 
 type Core struct {
-	ID           uint
-	UserId       uint
-	Name         string
-	ProductImage string
-	Description  string
-	Stock        int
-	Price        float64
+	ID           uint    `json:"id" form:"id"`
+	UserId       uint    `json:"user_id" form:"user_id"`
+	UserName     string  `json:"user_name" form:"user_name"`
+	Name         string  `json:"name" form:"name"`
+	ProductImage string  `json:"product_image" form:"product_image"`
+	Description  string  `json:"description" form:"description"`
+	Stock        int     `json:"stock" form:"stock"`
+	Price        float64 `json:"price" form:"price"`
 }
 
 type ProductHandler interface {

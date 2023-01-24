@@ -81,6 +81,18 @@ func (ps *productSvc) Delete(token interface{}, productId uint) error {
 	}
 	return nil
 }
-func (ps *productSvc) GetAllProducts() ([]product.Core, error)
+func (ps *productSvc) GetAllProducts() ([]product.Core, error) {
+	res, err := ps.qry.GetAllProducts()
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "data not found"
+		} else {
+			msg = "server problem"
+		}
+		return []product.Core{}, errors.New(msg)
+	}
+	return res, nil
+}
 func (ps *productSvc) GetUserProducts(token interface{}) ([]product.Core, error)
 func (ps *productSvc) GetProductById(token interface{}, productId uint)
