@@ -64,7 +64,7 @@ func (pq *productQuery) Update(userId, productId uint, updProduct product.Core, 
 	}
 
 	if err := qry.Error; err != nil {
-		log.Println("\tupdate peoduct query error: ", err.Error())
+		log.Println("\tupdate product query error: ", err.Error())
 		return product.Core{}, errors.New("not found")
 	}
 
@@ -87,7 +87,7 @@ func (pq *productQuery) Delete(userId, productId uint) error {
 }
 func (pq *productQuery) GetAllProducts() ([]product.Core, error) {
 	allprod := []product.Core{}
-	err := pq.db.Raw("SELECT products.id, products.user_id, user.name username, products.name, product_image, description, stock, price FROM products p JOIN users u ON u.id = p.id WHERE product.deleted_at IS NULL").Scan(&allprod).Error
+	err := pq.db.Raw("SELECT p.id, p.user_id, u.name username, p.name, product_image, description, stock, price FROM products p JOIN users u ON u.id = p.id WHERE p.deleted_at IS NULL").Scan(&allprod).Error
 	if err != nil {
 		log.Println("\terror query get all product: ", err.Error())
 		return []product.Core{}, err
@@ -100,7 +100,7 @@ func (pq *productQuery) GetUserProducts(userId uint) ([]product.Core, error) {
 }
 func (pq *productQuery) GetProductById(userId, productId uint) (product.Core, error) {
 	prod := product.Core{}
-	err := pq.db.Raw("SELECT products.id, products.user_id, user.name username, products.name, product_image, description, stock, price FROM products p JOIN users u ON u.id = p.id WHERE product.deleted_at IS NULL AND p.id = ?", productId).Scan(&prod).Error
+	err := pq.db.Raw("SELECT p.id, p.user_id, u.name username, p.name, product_image, description, stock, price FROM products p JOIN users u ON u.id = p.id WHERE p.deleted_at IS NULL AND p.id = ?", productId).Scan(&prod).Error
 	if err != nil {
 		log.Println("\terror query get all product: ", err.Error())
 		return product.Core{}, err
