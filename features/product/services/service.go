@@ -61,7 +61,26 @@ func (ps *productSvc) Update(token interface{}, productId uint, updProduct produ
 
 	return res, nil
 }
-func (ps *productSvc) Delete(token interface{}, productId uint) error
+func (ps *productSvc) Delete(token interface{}, productId uint) error {
+	userID := helper.ExtractToken(token)
+	if userID <= 0 {
+		log.Println("\terror extract token delete product service")
+		return errors.New("user not found")
+	}
+
+	err := ps.qry.Delete(uint(userID), productId)
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "post not found"
+		} else {
+			msg = "server problem"
+		}
+		log.Println("\terror calling delete data in service: ", err.Error())
+		return errors.New(msg)
+	}
+	return nil
+}
 func (ps *productSvc) GetAllProducts() ([]product.Core, error)
 func (ps *productSvc) GetUserProducts(token interface{}) ([]product.Core, error)
 func (ps *productSvc) GetProductById(token interface{}, productId uint)
