@@ -2,10 +2,13 @@ package service
 
 import (
 	"ecommerceapi/features/user"
+	"ecommerceapi/helper"
 	"ecommerceapi/mocks"
 	"errors"
 	"testing"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"golang.org/x/crypto/bcrypt"
@@ -111,6 +114,71 @@ func TestLogn(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.ErrorContains(t, err, "wrong password")
 		assert.Empty(t, token)
+		assert.Equal(t, uint(0), res.ID)
+		data.AssertExpectations(t)
+	})
+}
+
+func TestProfile(t *testing.T) {
+	data := mocks.NewUserData(t)
+
+	t.Run("Sukses lihat profile", func(t *testing.T) {
+		resData := user.Core{ID: uint(1), Name: "jerry", Email: "jerry@alterra.id", PhoneNumber: "08123456"}
+
+		data.On("Profile", uint(1)).Return(resData, nil).Once()
+
+		srv := New(data)
+
+		claims := jwt.MapClaims{}
+		claims["authorized"] = true
+		claims["userID"] = 1
+		claims["exp"] = time.Now().Add(time.Hour * 1).Unix() //Token expires after 1 hour
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+		token.Valid = true
+
+		res, err := srv.Profile(token)
+		assert.Nil(t, err)
+		assert.Equal(t, resData.ID, res.ID)
+		data.AssertExpectations(t)
+	})
+
+	t.Run("jwt tidak valid", func(t *testing.T) {
+		srv := New(data)
+
+		_, token := helper.GenerateJWT(1)
+
+		res, err := srv.Profile(token)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "not found")
+		assert.Equal(t, uint(0), res.ID)
+	})
+
+	t.Run("data tidak ditemukan", func(t *testing.T) {
+		data.On("Profile", uint(4)).Return(user.Core{}, errors.New("data not found")).Once()
+
+		srv := New(data)
+
+		_, token := helper.GenerateJWT(4)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Profile(pToken)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "not found")
+		assert.Equal(t, uint(0), res.ID)
+		data.AssertExpectations(t)
+	})
+
+	t.Run("masalah di server", func(t *testing.T) {
+		data.On("Profile", mock.Anything).Return(user.Core{}, errors.New("terdapat masalah pada server")).Once()
+		srv := New(data)
+
+		_, token := helper.GenerateJWT(1)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Profile(pToken)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "server")
 		assert.Equal(t, uint(0), res.ID)
 		data.AssertExpectations(t)
 	})
