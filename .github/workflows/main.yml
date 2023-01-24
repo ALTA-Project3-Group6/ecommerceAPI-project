@@ -1,0 +1,44 @@
+name: remote ssh command
+on:
+  push:
+    branches: 
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v3
+    -
+      name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+    -
+      name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    -
+      name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USER }}/ecommerceproject:latest
+    - 
+      name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          docker stop ecommerceproject
+          docker rm ecommerceproject
+          docker rmi ${{ secrets.DOCKER_USER }}/ecommerceproject:latest
+          docker pull ${{ secrets.DOCKER_USER }}/ecommerceproject:latest
+          docker run --name ecommerceproject -d -e DBUSER=admin -e DBPASS=${{ secrets.DBPASS_RDS_SOCMEDDB }} -e DBHOST=projectsocmeddb.cssizdymws4b.ap-southeast-1.rds.amazonaws.com -e DBPORT=3306 -e DBNAME=ecommDB -e JWT_KEY="BEa|t3rr4" -e KEYID=${{ secrets.S3_KEYID }} -e ACCESSKEY=${{ secrets.S3_ACCESSKEY }} -e MIDTRANSSERVERKEY=${{ secrets.MIDTRANS_SERVERKEY }} -p 80:8000 mfauzanptra/ecommerceproject
