@@ -91,19 +91,22 @@ func (pc *productControl) Update() echo.HandlerFunc {
 func (pc *productControl) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Get("user")
-		input := c.Param("id")
-		cnv, _ := strconv.Atoi(input)
-
-		err := pc.srv.Delete(token, uint(cnv))
+		input := c.Param("id_product")
+		cnv, err := strconv.Atoi(input)
 		if err != nil {
-			msg := ""
+			log.Println("\tRead param error: ", err.Error())
+			return c.JSON(http.StatusBadRequest, "wrong product id parameter")
+		}
+
+		err = pc.srv.Delete(token, uint(cnv))
+		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
-				msg = "product not found"
+				log.Println("error calling delete product service: ", err.Error())
+				return c.JSON(http.StatusNotFound, helper.ErrorResponse("product not found"))
 			} else {
-				msg = "server problem"
+				log.Println("error calling delete product service: ", err.Error())
+				return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
 			}
-			log.Println("error calling delete product service: ", err.Error())
-			return c.JSON(http.StatusInternalServerError, helper.ErrorResponse(msg))
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
@@ -113,7 +116,6 @@ func (pc *productControl) Delete() echo.HandlerFunc {
 }
 func (pc *productControl) GetAllProducts() echo.HandlerFunc {
 	return func(c echo.Context) error {
-
 		res, err := pc.srv.GetAllProducts()
 		if err != nil {
 			log.Println("error running GetAllProducts service: ", err.Error())
@@ -125,10 +127,38 @@ func (pc *productControl) GetAllProducts() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"data":    res,
+			"data":    CoreToGetProductsResp(res),
 			"message": "success show all products",
 		})
 	}
 }
-func (pc *productControl) GetUserProducts() echo.HandlerFunc
-func (pc *productControl) GetProductById() echo.HandlerFunc
+func (pc *productControl) GetUserProducts() echo.HandlerFunc {
+	return nil
+}
+func (pc *productControl) GetProductById() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token := c.Get("user")
+		input := c.Param("id_product")
+		cnv, err := strconv.Atoi(input)
+		if err != nil {
+			log.Println("\tRead param error: ", err.Error())
+			return c.JSON(http.StatusBadRequest, "wrong product id parameter")
+		}
+
+		res, err := pc.srv.GetProductById(token, uint(cnv))
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				log.Println("error calling delete product service: ", err.Error())
+				return c.JSON(http.StatusNotFound, helper.ErrorResponse("product not found"))
+			} else {
+				log.Println("error calling delete product service: ", err.Error())
+				return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    CoreToGetProductResp(res),
+			"message": "success get product by id",
+		})
+	}
+}
