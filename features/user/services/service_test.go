@@ -285,3 +285,61 @@ func TestUpdate(t *testing.T) {
 		data.AssertExpectations(t)
 	})
 }
+
+func TestDelete(t *testing.T) {
+	data := mocks.NewUserData(t)
+	t.Run("success delete", func(t *testing.T) {
+		data.On("Delete", uint(1)).Return(nil).Once()
+
+		srv := New(data)
+
+		claims := jwt.MapClaims{}
+		claims["authorized"] = true
+		claims["userID"] = 1
+		claims["exp"] = time.Now().Add(time.Hour * 1).Unix() //Token expires after 1 hour
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+		token.Valid = true
+
+		err := srv.Delete(token)
+		assert.Nil(t, err)
+		data.AssertExpectations(t)
+	})
+
+	t.Run("jwt not valid", func(t *testing.T) {
+		srv := New(data)
+
+		_, token := helper.GenerateJWT(1)
+
+		err := srv.Delete(token)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "not found")
+	})
+
+	t.Run("data not found", func(t *testing.T) {
+		data.On("Delete", uint(4)).Return(errors.New("data not found")).Once()
+
+		srv := New(data)
+
+		_, token := helper.GenerateJWT(4)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		err := srv.Delete(pToken)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "not found")
+		data.AssertExpectations(t)
+	})
+
+	t.Run("masalah di server", func(t *testing.T) {
+		data.On("Delete", mock.Anything).Return(errors.New("terdapat masalah pada server")).Once()
+		srv := New(data)
+
+		_, token := helper.GenerateJWT(1)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		err := srv.Delete(pToken)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "server")
+		data.AssertExpectations(t)
+	})
+}
