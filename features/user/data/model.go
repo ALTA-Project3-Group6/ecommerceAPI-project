@@ -18,7 +18,7 @@ type User struct {
 	// Orders       []Order
 }
 
-func ToCore(data User) user.Core {
+func Tocore(data User) user.Core {
 	return user.Core{
 		ID:           data.ID,
 		Email:        data.Email,
