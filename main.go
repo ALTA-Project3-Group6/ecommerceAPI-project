@@ -5,6 +5,9 @@ import (
 	pd "ecommerceapi/features/product/data"
 	ph "ecommerceapi/features/product/handler"
 	ps "ecommerceapi/features/product/services"
+	ud "ecommerceapi/features/user/data"
+	uh "ecommerceapi/features/user/handler"
+	us "ecommerceapi/features/user/services"
 	"ecommerceapi/migration"
 	"log"
 
@@ -22,6 +25,10 @@ func main() {
 	prodSrv := ps.New(prodData)
 	prodHdl := ph.New(prodSrv)
 
+	userData := ud.New(db)
+	userSrv := us.New(userData)
+	userHdl := uh.New(userSrv)
+
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -29,6 +36,12 @@ func main() {
 	}))
 
 	//user
+	e.POST("/register", userHdl.Register())
+	e.POST("/login", userHdl.Login())
+
+	e.GET("/users", userHdl.Profile(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.PUT("/users", userHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.DELETE("/users", userHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	//product
 	e.POST("/products", prodHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
