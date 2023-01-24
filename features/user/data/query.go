@@ -46,7 +46,7 @@ func (uq *userQry) Login(email string) (user.Core, error) {
 	return ToCore(res), nil
 }
 
-func (uq *userQry) Profile(id uint) (interface{}, error) {
+func (uq *userQry) Profile(id uint) (user.Core, error) {
 	res := User{}
 	if err := uq.db.Where("id = ?", id).First(&res).Error; err != nil {
 		log.Println("Get By ID query error", err.Error())
