@@ -40,5 +40,5 @@ type ProductData interface {
 	Delete(userId, productId uint) error
 	GetAllProducts() ([]Core, error)
 	GetUserProducts(userId uint) ([]Core, error)
-	GetProductById(userId, productId uint)
+	GetProductById(userId, productId uint) (Core, error)
 }
