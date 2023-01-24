@@ -3,7 +3,7 @@ package user
 import (
 	"mime/multipart"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type Core struct {
