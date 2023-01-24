@@ -19,8 +19,3 @@ func InitDB(ac AppConfig) *gorm.DB {
 
 	return db
 }
-
-func Migrate(db *gorm.DB) {
-	// db.AutoMigrate(user.User{})
-
-}
