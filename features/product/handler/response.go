@@ -30,3 +30,15 @@ func CoreToGetProductsResp(data []product.Core) []GetProductsResp {
 	}
 	return res
 }
+
+func CoreToGetProductResp(data product.Core) GetProductsResp {
+	return GetProductsResp{
+		ID:           data.ID,
+		Name:         data.Name,
+		Description:  data.Description,
+		Stock:        data.Stock,
+		Price:        data.Price,
+		ProductImage: data.ProductImage,
+		User:         UserProductRes{UserId: data.UserId, UserName: data.UserName},
+	}
+}
