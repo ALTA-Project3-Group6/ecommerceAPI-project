@@ -27,15 +27,15 @@ type UserHandler interface {
 type UserService interface {
 	Register(newUser Core) (Core, error)
 	Login(email, password string) (string, Core, error)
-	Profile(userToken interface{}) (interface{}, error)
-	Update(token interface{}, updateData Core, profilePhoto *multipart.FileHeader, backgroundPhoto *multipart.FileHeader) (Core, error)
+	Profile(userToken interface{}) (Core, error)
+	Update(userToken interface{}, updateData Core, profilePhoto *multipart.FileHeader) (Core, error)
 	Delete(userToken interface{}) error
 }
 
 type UserData interface {
 	Register(newUser Core) (Core, error)
 	Login(email string) (Core, error)
-	Profile(id uint) (interface{}, error)
+	Profile(id uint) (Core, error)
 	Update(id uint, updateData Core) (Core, error)
 	Delete(id uint) error
 }
