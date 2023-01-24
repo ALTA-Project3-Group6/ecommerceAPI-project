@@ -7,6 +7,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -83,11 +84,33 @@ func (pc *productControl) Update() echo.HandlerFunc {
 
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"data":    res,
-			"message": "success update post",
+			"message": "success update product",
 		})
 	}
 }
-func (pc *productControl) Delete() echo.HandlerFunc
+func (pc *productControl) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token := c.Get("user")
+		input := c.Param("id")
+		cnv, _ := strconv.Atoi(input)
+
+		err := pc.srv.Delete(token, uint(cnv))
+		if err != nil {
+			msg := ""
+			if strings.Contains(err.Error(), "not found") {
+				msg = "product not found"
+			} else {
+				msg = "server problem"
+			}
+			log.Println("error calling delete product service: ", err.Error())
+			return c.JSON(http.StatusInternalServerError, helper.ErrorResponse(msg))
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success delete product",
+		})
+	}
+}
 func (pc *productControl) GetAllProducts() echo.HandlerFunc
 func (pc *productControl) GetUserProducts() echo.HandlerFunc
 func (pc *productControl) GetProductById() echo.HandlerFunc
