@@ -97,14 +97,8 @@ func (ps *productSvc) GetAllProducts() ([]product.Core, error) {
 func (ps *productSvc) GetUserProducts(token interface{}) ([]product.Core, error) {
 	return []product.Core{}, nil
 }
-func (ps *productSvc) GetProductById(token interface{}, productId uint) (product.Core, error) {
-	userId := helper.ExtractToken(token)
-	if userId <= 0 {
-		log.Println("\terror extract token delete product service")
-		return product.Core{}, errors.New("user not found")
-	}
-
-	res, err := ps.qry.GetProductById(uint(userId), productId)
+func (ps *productSvc) GetProductById(productId uint) (product.Core, error) {
+	res, err := ps.qry.GetProductById(productId)
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {

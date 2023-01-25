@@ -8,7 +8,7 @@ type RegisterRequest struct {
 	PhoneNumber  string `json:"phone_number" form:"phone_number"`
 	Password     string `json:"password" form:"password"`
 	ProfilePhoto string `json:"profile_photo" form:"profile_photo"`
-	Address      string `json:"address" from:"address"`
+	Address      string `json:"address" form:"address"`
 }
 
 type LoginReqest struct {
