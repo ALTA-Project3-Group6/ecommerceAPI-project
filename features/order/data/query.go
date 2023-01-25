@@ -125,7 +125,7 @@ func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
 func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus string) error {
 	order := order.Core{}
 
-	oq.db.First(&order, transactionId)
+	oq.db.First(&order, "transaction_id = ?", transactionId)
 
 	// 5. Do set transaction status based on response from check transaction status
 	if transStatus == "capture" {
@@ -154,6 +154,18 @@ func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus s
 	if aff.RowsAffected <= 0 {
 		log.Println("error update order status, no rows affected")
 		return errors.New("error update order status")
+	}
+
+	//update product stock
+	if order.OrderStatus == "success" {
+		orderProducts := []orderproduct.Core{}
+		oq.db.Find(&orderProducts, "order_id = ?", order.ID)
+		for _, item := range orderProducts {
+			prod := product.Product{}
+			oq.db.First(&prod, item.ProductId)
+			prod.Stock -= item.Quantity
+			oq.db.Save(&prod)
+		}
 	}
 
 	return nil
