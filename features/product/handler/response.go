@@ -9,13 +9,13 @@ type UserProductRes struct {
 	UserName string `json:"user_name" form:"user_name"`
 }
 type GetProductsResp struct {
-	ID           uint    `json:"id" form:"id"`
-	Name         string  `json:"name" form:"name"`
-	Description  string  `json:"description" form:"description"`
-	Stock        int     `json:"stock" form:"stock"`
-	Price        float64 `json:"price" form:"price"`
-	ProductImage string  `json:"product_image" form:"product_image"`
-	User         UserProductRes
+	ID           uint           `json:"id" form:"id"`
+	Name         string         `json:"name" form:"name"`
+	Description  string         `json:"description" form:"description"`
+	Stock        int            `json:"stock" form:"stock"`
+	Price        float64        `json:"price" form:"price"`
+	ProductImage string         `json:"product_image" form:"product_image"`
+	User         UserProductRes `json:"user"`
 }
 
 func CoreToGetProductsResp(data []product.Core) []GetProductsResp {
