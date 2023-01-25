@@ -7,13 +7,13 @@ import (
 )
 
 type Core struct {
-	ID            uint
-	BuyerId       uint
-	SellerId      uint
-	TotalPrice    float64
-	CreatedAt     time.Time
-	OrderStatus   string
-	TransactionId string
+	ID            uint      `json:"id"`
+	BuyerId       uint      `json:"buyer_id"`
+	SellerId      uint      `json:"seller_id"`
+	TotalPrice    float64   `json:"total_price"`
+	CreatedAt     time.Time `json:"created_at"`
+	OrderStatus   string    `json:"order_status"`
+	TransactionId string    `json:"transaction_id"`
 }
 
 type OrderHandler interface {
