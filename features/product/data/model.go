@@ -2,6 +2,7 @@ package data
 
 import (
 	"ecommerceapi/features/product"
+	user "ecommerceapi/features/user/data"
 
 	"gorm.io/gorm"
 )
@@ -9,6 +10,7 @@ import (
 type Product struct {
 	gorm.Model
 	UserId       uint
+	User         user.User
 	Name         string
 	ProductImage string
 	Description  string
