@@ -1,6 +1,8 @@
 package handler
 
-import "ecommerceapi/features/product"
+import (
+	"ecommerceapi/features/product"
+)
 
 type UserProductRes struct {
 	UserId   uint   `json:"user_id" form:"user_id"`
@@ -18,15 +20,8 @@ type GetProductsResp struct {
 
 func CoreToGetProductsResp(data []product.Core) []GetProductsResp {
 	res := []GetProductsResp{}
-	for i, val := range data {
-		res[i].ID = val.ID
-		res[i].Name = val.Name
-		res[i].Description = val.Name
-		res[i].Stock = val.Stock
-		res[i].Price = val.Price
-		res[i].ProductImage = val.ProductImage
-		res[i].User.UserId = val.UserId
-		res[i].User.UserName = val.UserName
+	for _, val := range data {
+		res = append(res, CoreToGetProductResp(val))
 	}
 	return res
 }
