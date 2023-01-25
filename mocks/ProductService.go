@@ -74,8 +74,24 @@ func (_m *ProductService) GetAllProducts() ([]product.Core, error) {
 }
 
 // GetProductById provides a mock function with given fields: token, productId
-func (_m *ProductService) GetProductById(token interface{}, productId uint) {
-	_m.Called(token, productId)
+func (_m *ProductService) GetProductById(token interface{}, productId uint) (product.Core, error) {
+	ret := _m.Called(token, productId)
+
+	var r0 product.Core
+	if rf, ok := ret.Get(0).(func(interface{}, uint) product.Core); ok {
+		r0 = rf(token, productId)
+	} else {
+		r0 = ret.Get(0).(product.Core)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(interface{}, uint) error); ok {
+		r1 = rf(token, productId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetUserProducts provides a mock function with given fields: token
