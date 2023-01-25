@@ -2,6 +2,9 @@ package main
 
 import (
 	"ecommerceapi/config"
+	od "ecommerceapi/features/order/data"
+	oh "ecommerceapi/features/order/handler"
+	os "ecommerceapi/features/order/services"
 	pd "ecommerceapi/features/product/data"
 	ph "ecommerceapi/features/product/handler"
 	ps "ecommerceapi/features/product/services"
@@ -29,6 +32,10 @@ func main() {
 	userSrv := us.New(userData)
 	userHdl := uh.New(userSrv)
 
+	orderData := od.New(db)
+	orderSrv := os.New(orderData)
+	orderHdl := oh.New(orderSrv)
+
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -49,6 +56,12 @@ func main() {
 	e.PUT("/products/:id_product", prodHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.GET("/products/:id_product", prodHdl.GetProductById())
 	e.DELETE("/products/:id_product", prodHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
+
+	//order
+	e.POST("/orders", orderHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/orders", orderHdl.GetOrderHistory(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/sales", orderHdl.GetSellingHistory(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.POST("/paymentnotification", orderHdl.NotificationTransactionStatus())
 
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())
