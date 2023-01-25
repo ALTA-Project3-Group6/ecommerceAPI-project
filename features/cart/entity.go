@@ -15,7 +15,7 @@ type Core struct {
 type CartHandler interface {
 	AddCart() echo.HandlerFunc
 	ShowCart() echo.HandlerFunc
-	UpdateCart() echo.HandlerFunc
+	// UpdateCart() echo.HandlerFunc
 	DeleteCart() echo.HandlerFunc
 }
 
