@@ -22,19 +22,19 @@ type OrderHandler interface {
 	Add() echo.HandlerFunc
 	GetOrderHistory() echo.HandlerFunc
 	GetSellingHistory() echo.HandlerFunc
-	GetTransactionStatus() echo.HandlerFunc
+	NotificationTransactionStatus() echo.HandlerFunc
 }
 
 type OrderService interface {
 	Add(token interface{}, totalPrice float64) (Core, string, error)
 	GetOrderHistory(token interface{}) ([]Core, error)
 	GetSellingHistory(token interface{}) ([]Core, error)
-	GetTransactionStatus(orderId uint) (string, error)
+	NotificationTransactionStatus(transactionId string) error
 }
 
 type OrderData interface {
 	Add(userId uint, totalPrice float64) (Core, string, error)
 	GetOrderHistory(userId uint) ([]Core, error)
 	GetSellingHistory(userId uint) ([]Core, error)
-	GetTransactionStatus(orderId uint) (string, error)
+	NotificationTransactionStatus(transactionId, transStatus string) error
 }

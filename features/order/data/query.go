@@ -6,6 +6,7 @@ import (
 	"ecommerceapi/features/order"
 	"ecommerceapi/features/orderproduct"
 	product "ecommerceapi/features/product/data"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -121,6 +122,17 @@ func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
 
 	return orders, nil
 }
-func (oq *orderQuery) GetTransactionStatus(orderId uint) (string, error) {
-	return "", nil
+func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus string) error {
+	order := order.Core{}
+
+	oq.db.First(&order, transactionId)
+	order.OrderStatus = transStatus
+	aff := oq.db.Save(&order)
+
+	if aff.RowsAffected <= 0 {
+		log.Println("error update order status, no rows affected")
+		return errors.New("error update order status")
+	}
+
+	return nil
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"ecommerceapi/config"
 	"ecommerceapi/features/order"
 	"ecommerceapi/helper"
 	"errors"
@@ -75,6 +76,19 @@ func (os *orderSvc) GetSellingHistory(token interface{}) ([]order.Core, error) {
 
 	return res, nil
 }
-func (os *orderSvc) GetTransactionStatus(orderId uint) (string, error) {
-	return "", nil
+func (os *orderSvc) NotificationTransactionStatus(transactionId string) error {
+	c := config.MidtransCoreAPIClient()
+
+	// 4. Check transaction to Midtrans with param orderId
+	transactionStatusResp, e := c.CheckTransaction(transactionId)
+	if e != nil {
+		return errors.New("error check transaction status")
+	}
+
+	err := os.qry.NotificationTransactionStatus(transactionId, transactionStatusResp.TransactionStatus)
+	if err != nil {
+		return errors.New("error calling NotificationTransactionStatus data in service")
+	}
+
+	return nil
 }
