@@ -126,9 +126,31 @@ func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus s
 	order := order.Core{}
 
 	oq.db.First(&order, transactionId)
-	order.OrderStatus = transStatus
-	aff := oq.db.Save(&order)
 
+	// 5. Do set transaction status based on response from check transaction status
+	if transStatus == "capture" {
+		if transStatus == "challenge" {
+			// TODO set transaction status on your database to 'challenge'
+			// e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
+			order.OrderStatus = "challenge"
+		} else if transStatus == "accept" {
+			// TODO set transaction status on your database to 'success'
+			order.OrderStatus = "success"
+		}
+	} else if transStatus == "settlement" {
+		// TODO set transaction status on your databaase to 'success'
+		order.OrderStatus = "success"
+	} else if transStatus == "cancel" || transStatus == "expire" {
+		// TODO set transaction status on your databaase to 'failure'
+		order.OrderStatus = "failure"
+	} else if transStatus == "pending" {
+		// TODO set transaction status on your databaase to 'pending' / waiting payment
+		order.OrderStatus = "waiting payment"
+	} else {
+		order.OrderStatus = transStatus
+	}
+
+	aff := oq.db.Save(&order)
 	if aff.RowsAffected <= 0 {
 		log.Println("error update order status, no rows affected")
 		return errors.New("error update order status")
