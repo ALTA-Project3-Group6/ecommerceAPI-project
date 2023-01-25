@@ -27,8 +27,8 @@ require (
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	golang.org/x/time v0.2.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/gorm v1.23.8 // indirect
 )
 
@@ -36,6 +36,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/labstack/echo/v4 v4.10.0
+	github.com/midtrans/midtrans-go v1.3.6
 	github.com/stretchr/testify v1.8.1
 	gorm.io/driver/mysql v1.4.5
 )
