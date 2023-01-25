@@ -5,7 +5,7 @@ import (
 )
 
 type AddProductReq struct {
-	Name         string  `json:"product_name" form:"product_name"`
+	Name         string  `json:"name" form:"name"`
 	ProductImage string  `json:"product_image" form:"product_image"`
 	Description  string  `json:"description" form:"description"`
 	Stock        int     `json:"stock" form:"stock"`
