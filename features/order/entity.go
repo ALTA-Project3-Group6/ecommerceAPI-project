@@ -9,7 +9,9 @@ import (
 type Core struct {
 	ID            uint      `json:"id"`
 	BuyerId       uint      `json:"buyer_id"`
+	BuyerName     string    `json:"buyer_name"`
 	SellerId      uint      `json:"seller_id"`
+	SellerName    string    `json:"seller_name"`
 	TotalPrice    float64   `json:"total_price"`
 	CreatedAt     time.Time `json:"created_at"`
 	OrderStatus   string    `json:"order_status"`
