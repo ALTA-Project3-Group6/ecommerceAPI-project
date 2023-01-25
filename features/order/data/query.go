@@ -4,7 +4,6 @@ import (
 	"ecommerceapi/config"
 	cart "ecommerceapi/features/cart/data"
 	"ecommerceapi/features/order"
-	"ecommerceapi/features/orderproduct"
 	product "ecommerceapi/features/product/data"
 	"errors"
 	"fmt"
@@ -62,9 +61,9 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	tx.Save(&orderinput)
 
 	// membuat orderproduct
-	orderProducts := []orderproduct.Core{}
+	orderProducts := []OrderProduct{}
 	for _, item := range userCart {
-		orderProduct := orderproduct.Core{
+		orderProduct := OrderProduct{
 			OrderId:   orderinput.ID,
 			ProductId: item.ProductId,
 			Quantity:  item.Quantity,
@@ -123,7 +122,7 @@ func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
 	return orders, nil
 }
 func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus string) error {
-	order := order.Core{}
+	order := Order{}
 
 	oq.db.First(&order, "transaction_id = ?", transactionId)
 
@@ -158,7 +157,7 @@ func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus s
 
 	//update product stock
 	if order.OrderStatus == "success" {
-		orderProducts := []orderproduct.Core{}
+		orderProducts := []OrderProduct{}
 		oq.db.Find(&orderProducts, "order_id = ?", order.ID)
 		for _, item := range orderProducts {
 			prod := product.Product{}
