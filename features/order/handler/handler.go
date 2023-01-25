@@ -49,10 +49,42 @@ func (oh *OrderHandle) Add() echo.HandlerFunc {
 	}
 }
 func (oh *OrderHandle) GetOrderHistory() echo.HandlerFunc {
-	return nil
+	return func(c echo.Context) error {
+		token := c.Get("user")
+
+		res, err := oh.srv.GetOrderHistory(token)
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (data not found)"))
+			} else {
+				return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    res,
+			"message": "success show order history",
+		})
+	}
 }
 func (oh *OrderHandle) GetSellingHistory() echo.HandlerFunc {
-	return nil
+	return func(c echo.Context) error {
+		token := c.Get("user")
+
+		res, err := oh.srv.GetOrderHistory(token)
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (data not found)"))
+			} else {
+				return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    res,
+			"message": "success show order history",
+		})
+	}
 }
 func (oh *OrderHandle) GetTransactionStatus() echo.HandlerFunc {
 	return nil

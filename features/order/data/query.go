@@ -2,10 +2,10 @@ package data
 
 import (
 	"ecommerceapi/config"
-	"ecommerceapi/features/cart"
-	tableCart "ecommerceapi/features/cart/data"
+	cart "ecommerceapi/features/cart/data"
 	"ecommerceapi/features/order"
 	"ecommerceapi/features/orderproduct"
+	product "ecommerceapi/features/product/data"
 	"fmt"
 	"log"
 	"time"
@@ -42,21 +42,27 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	}
 
 	// update transactionid di database
-	tx.First(&orderinput)
+	// tx.First(&orderinput)
 	orderinput.TransactionId = "Transaction-" + fmt.Sprint(orderinput.ID)
 	tx.Save(&orderinput)
 
 	// mengambil cart user
-	cart := []cart.Core{}
-	if err := tx.Where("user_id = ?", userId).Find(&cart).Error; err != nil {
+	userCart := []cart.Cart{}
+	if err := tx.Where("user_id = ?", userId).Find(&userCart).Error; err != nil {
 		tx.Rollback()
 		log.Println("error retrieve user cart: ", err.Error())
 		return order.Core{}, "", err
 	}
 
+	// mengisi seller_id di order
+	product := product.Product{}
+	tx.First(&product, userCart[0].ProductId)
+	orderinput.SellerId = product.UserId
+	tx.Save(&orderinput)
+
 	// membuat orderproduct
 	orderProducts := []orderproduct.Core{}
-	for _, item := range cart {
+	for _, item := range userCart {
 		orderProduct := orderproduct.Core{
 			OrderId:   orderinput.ID,
 			ProductId: item.ProductId,
@@ -72,7 +78,7 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	}
 
 	// menghapus cart user
-	if err := tx.Where("user_id = ?", userId).Delete(tableCart.Cart{}).Error; err != nil {
+	if err := tx.Where("user_id = ?", userId).Delete(cart.Cart{}).Error; err != nil {
 		tx.Rollback()
 		log.Println("error delete user cart: ", err.Error())
 		return order.Core{}, "", err
@@ -94,10 +100,26 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	return DataToCore(orderinput), snapResp.RedirectURL, nil
 }
 func (oq *orderQuery) GetOrderHistory(userId uint) ([]order.Core, error) {
-	return []order.Core{}, nil
+	orders := []order.Core{}
+
+	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u.id WHERE o.buyer_id = ?", userId).Scan(&orders).Error
+	if err != nil {
+		log.Println("error query select order hisoty: ", err.Error())
+		return []order.Core{}, err
+	}
+
+	return orders, nil
 }
 func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
-	return []order.Core{}, nil
+	orders := []order.Core{}
+
+	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u.id WHERE o.seller_id = ?", userId).Scan(&orders).Error
+	if err != nil {
+		log.Println("error query select order hisoty: ", err.Error())
+		return []order.Core{}, err
+	}
+
+	return orders, nil
 }
 func (oq *orderQuery) GetTransactionStatus(orderId uint) (string, error) {
 	return "", nil

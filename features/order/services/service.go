@@ -5,6 +5,7 @@ import (
 	"ecommerceapi/helper"
 	"errors"
 	"log"
+	"strings"
 )
 
 type orderSvc struct {
@@ -33,10 +34,46 @@ func (os *orderSvc) Add(token interface{}, totalPrice float64) (order.Core, stri
 	return res, redirectURL, nil
 }
 func (os *orderSvc) GetOrderHistory(token interface{}) ([]order.Core, error) {
-	return []order.Core{}, nil
+	userId := helper.ExtractToken(token)
+	if userId <= 0 {
+		log.Println("error extract token")
+		return []order.Core{}, errors.New("user not found")
+	}
+
+	res, err := os.qry.GetOrderHistory(uint(userId))
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "data not found"
+		} else {
+			msg = "server problem"
+		}
+		log.Println("error calling getorderhistory data in service: ", err.Error())
+		return []order.Core{}, errors.New(msg)
+	}
+
+	return res, nil
 }
 func (os *orderSvc) GetSellingHistory(token interface{}) ([]order.Core, error) {
-	return []order.Core{}, nil
+	userId := helper.ExtractToken(token)
+	if userId <= 0 {
+		log.Println("error extract token")
+		return []order.Core{}, errors.New("user not found")
+	}
+
+	res, err := os.qry.GetOrderHistory(uint(userId))
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "data not found"
+		} else {
+			msg = "server problem"
+		}
+		log.Println("error calling getorderhistory data in service: ", err.Error())
+		return []order.Core{}, errors.New(msg)
+	}
+
+	return res, nil
 }
 func (os *orderSvc) GetTransactionStatus(orderId uint) (string, error) {
 	return "", nil
