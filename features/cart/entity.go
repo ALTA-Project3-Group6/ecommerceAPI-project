@@ -3,11 +3,13 @@ package cart
 import "github.com/labstack/echo/v4"
 
 type Core struct {
-	ID        uint
-	UserID    uint
-	ProductID uint
-	Price     float64
-	Quantity  int
+	ID          uint
+	UserID      uint
+	ProductID   uint
+	Price       float64
+	Quantity    int
+	ProductName string
+	SellerName  string
 }
 
 type CartHandler interface {
