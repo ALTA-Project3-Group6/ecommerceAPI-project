@@ -137,7 +137,6 @@ func (pc *productControl) GetUserProducts() echo.HandlerFunc {
 }
 func (pc *productControl) GetProductById() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		token := c.Get("user")
 		input := c.Param("id_product")
 		cnv, err := strconv.Atoi(input)
 		if err != nil {
@@ -145,7 +144,7 @@ func (pc *productControl) GetProductById() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "wrong product id parameter")
 		}
 
-		res, err := pc.srv.GetProductById(token, uint(cnv))
+		res, err := pc.srv.GetProductById(uint(cnv))
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
 				log.Println("error calling delete product service: ", err.Error())

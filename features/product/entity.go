@@ -32,7 +32,7 @@ type ProductService interface {
 	Delete(token interface{}, productId uint) error
 	GetAllProducts() ([]Core, error)
 	GetUserProducts(token interface{}) ([]Core, error)
-	GetProductById(token interface{}, productId uint) (Core, error)
+	GetProductById(productId uint) (Core, error)
 }
 
 type ProductData interface {
@@ -41,5 +41,5 @@ type ProductData interface {
 	Delete(userId, productId uint) error
 	GetAllProducts() ([]Core, error)
 	GetUserProducts(userId uint) ([]Core, error)
-	GetProductById(userId, productId uint) (Core, error)
+	GetProductById(productId uint) (Core, error)
 }
