@@ -2,8 +2,8 @@ package data
 
 import (
 	"ecommerceapi/features/cart"
-	product "ecommerceapi/features/product"
-	user "ecommerceapi/features/user"
+	product "ecommerceapi/features/product/data"
+	user "ecommerceapi/features/user/data"
 
 	"gorm.io/gorm"
 )

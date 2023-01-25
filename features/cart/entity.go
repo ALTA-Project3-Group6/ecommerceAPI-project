@@ -26,7 +26,7 @@ type CartService interface {
 
 type CartData interface {
 	AddCart(userId uint, productId uint, newCart Core) (Core, error)
-	ShowCart(userId uint) ([]Core, error)
-	UpdateCart(userId uint, productId uint, updCart Core) (Core, error)
+	// ShowCart(userId uint) ([]Core, error)
+	UpdateCart(userId uint, cartId uint, updCart Core) (Core, error)
 	DeleteCart(userId uint, cartId uint) error
 }
