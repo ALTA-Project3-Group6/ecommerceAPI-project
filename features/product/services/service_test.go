@@ -10,29 +10,30 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestAdd(t *testing.T) {
 	repo := mocks.NewProductData(t)
 
 	inputData := product.Core{
-		Name: "Indomie goreng",
+		Name:        "Indomie goreng",
 		Description: "mie instan terenak didunia",
-		Stock: 20,
-		ProductImage: "Indomie.jpg",
+		Stock:       20,
+		// ProductImage: "Indomie.jpg",
 	}
 	resData := product.Core{
-		ID: 1,
-		Name: "Indomie goreng",
+		ID:          1,
+		Name:        "Indomie goreng",
 		Description: "mie instan terenak didunia",
-		Stock: 20,
-		ProductImage: "https://socmedapibucket.s3.ap-southeast-1.amazonaws.com/files/post/1/indomie-photo.jpeg",
+		Stock:       20,
+		// ProductImage: "https://socmedapibucket.s3.ap-southeast-1.amazonaws.com/files/post/1/indomie-photo.jpeg",
 	}
 	var a *multipart.FileHeader
 
 	t.Run("success add post", func(t *testing.T) {
 
-		repo.On("Add", uint(1), inputData).Return(resData, nil).Once()
+		repo.On("Add", uint(1), inputData, mock.Anything).Return(resData, nil).Once()
 
 		srv := New(repo)
 
