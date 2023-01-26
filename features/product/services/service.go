@@ -72,7 +72,7 @@ func (ps *productSvc) Delete(token interface{}, productId uint) error {
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
-			msg = "post not found"
+			msg = "product not found"
 		} else {
 			msg = "server problem"
 		}
@@ -94,9 +94,10 @@ func (ps *productSvc) GetAllProducts() ([]product.Core, error) {
 	}
 	return res, nil
 }
-func (ps *productSvc) GetUserProducts(token interface{}) ([]product.Core, error) {
-	return []product.Core{}, nil
-}
+
+//	func (ps *productSvc) GetUserProducts(token interface{}) ([]product.Core, error) {
+//		return []product.Core{}, nil
+//	}
 func (ps *productSvc) GetProductById(productId uint) (product.Core, error) {
 	res, err := ps.qry.GetProductById(productId)
 	if err != nil {
