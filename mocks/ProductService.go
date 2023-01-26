@@ -94,29 +94,6 @@ func (_m *ProductService) GetProductById(productId uint) (product.Core, error) {
 	return r0, r1
 }
 
-// GetUserProducts provides a mock function with given fields: token
-func (_m *ProductService) GetUserProducts(token interface{}) ([]product.Core, error) {
-	ret := _m.Called(token)
-
-	var r0 []product.Core
-	if rf, ok := ret.Get(0).(func(interface{}) []product.Core); ok {
-		r0 = rf(token)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]product.Core)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(interface{}) error); ok {
-		r1 = rf(token)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // Update provides a mock function with given fields: token, productId, updProduct, productImage
 func (_m *ProductService) Update(token interface{}, productId uint, updProduct product.Core, productImage *multipart.FileHeader) (product.Core, error) {
 	ret := _m.Called(token, productId, updProduct, productImage)
