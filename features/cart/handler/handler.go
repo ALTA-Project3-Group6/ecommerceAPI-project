@@ -64,7 +64,7 @@ func (cc *cartControl) ShowCart() echo.HandlerFunc {
 
 func (cc *cartControl) UpdateCart() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		paramId := c.Param("id")
+		paramId := c.Param("id_carts")
 		cartId, _ := strconv.Atoi(paramId)
 		input := UpdCartReq{}
 		err := c.Bind(&input)
