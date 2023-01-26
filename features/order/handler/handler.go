@@ -115,17 +115,23 @@ func (oh *OrderHandle) NotificationTransactionStatus() echo.HandlerFunc {
 		return c.JSON(c.Response().Write([]byte("ok")))
 	}
 }
-func (oh *OrderHandle) CancelOrder() echo.HandlerFunc {
+func (oh *OrderHandle) UpdateStatus() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		oid := c.Param("order_id")
+		status := StatusReq{}
+		err := c.Bind(&status)
+		if err != nil {
+			log.Println("bind order status error: ", err.Error())
+			return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input"))
+		}
 
+		oid := c.Param("order_id")
 		orderId, err := strconv.Atoi(oid)
 		if err != nil {
 			log.Println("error read parameter: ", err.Error())
 			return c.JSON(http.StatusBadRequest, helper.ErrorResponse("fail to read parameter"))
 		}
 
-		err = oh.srv.CancelOrder(uint(orderId))
+		err = oh.srv.UpdateStatus(uint(orderId), status.OrderStatus)
 		if err != nil {
 			if strings.Contains(err.Error(), "bad request") {
 				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (bad request)"))
