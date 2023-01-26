@@ -98,8 +98,8 @@ func (os *orderSvc) NotificationTransactionStatus(transactionId string) error {
 
 	return nil
 }
-func (os *orderSvc) CancelOrder(orderId uint) error {
-	err := os.qry.CancelOrder(orderId)
+func (os *orderSvc) UpdateStatus(orderId uint, status string) error {
+	err := os.qry.UpdateStatus(orderId, status)
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {

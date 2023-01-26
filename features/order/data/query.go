@@ -180,14 +180,14 @@ func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus s
 
 	return nil
 }
-func (oq *orderQuery) CancelOrder(orderId uint) error {
+func (oq *orderQuery) UpdateStatus(orderId uint, status string) error {
 	input := Order{}
 	err := oq.db.Where("id = ?", orderId).First(&input).Error
 	if err != nil {
 		log.Println("error select order: ", err.Error())
 		return errors.New("order not found")
 	}
-	input.OrderStatus = "cancelled"
+	input.OrderStatus = status
 	oq.db.Save(&input)
 	return nil
 }

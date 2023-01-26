@@ -75,7 +75,7 @@ func main() {
 	e.GET("/orders", orderHdl.GetOrderHistory(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.GET("/sales", orderHdl.GetSellingHistory(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.POST("/paymentnotification", orderHdl.NotificationTransactionStatus())
-	e.PUT("/orders/:order_id", orderHdl.CancelOrder(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.PUT("/orders/:order_id", orderHdl.UpdateStatus(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())

@@ -28,22 +28,6 @@ func (_m *OrderHandler) Add() echo.HandlerFunc {
 	return r0
 }
 
-// CancelOrder provides a mock function with given fields:
-func (_m *OrderHandler) CancelOrder() echo.HandlerFunc {
-	ret := _m.Called()
-
-	var r0 echo.HandlerFunc
-	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
-		r0 = rf()
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(echo.HandlerFunc)
-		}
-	}
-
-	return r0
-}
-
 // GetOrderHistory provides a mock function with given fields:
 func (_m *OrderHandler) GetOrderHistory() echo.HandlerFunc {
 	ret := _m.Called()
@@ -78,6 +62,22 @@ func (_m *OrderHandler) GetSellingHistory() echo.HandlerFunc {
 
 // NotificationTransactionStatus provides a mock function with given fields:
 func (_m *OrderHandler) NotificationTransactionStatus() echo.HandlerFunc {
+	ret := _m.Called()
+
+	var r0 echo.HandlerFunc
+	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(echo.HandlerFunc)
+		}
+	}
+
+	return r0
+}
+
+// UpdateStatus provides a mock function with given fields:
+func (_m *OrderHandler) UpdateStatus() echo.HandlerFunc {
 	ret := _m.Called()
 
 	var r0 echo.HandlerFunc
