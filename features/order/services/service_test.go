@@ -275,3 +275,37 @@ func TestNotificationTransaction(t *testing.T) {
 	// 	repo.AssertExpectations(t)
 	// })
 }
+
+func TestCancelOrder(t *testing.T) {
+	repo := mocks.NewOrderData(t)
+	orderId := uint(1)
+
+	t.Run("success cancel order", func(t *testing.T) {
+		repo.On("CancelOrder", orderId).Return(nil).Once()
+
+		srv := New(repo)
+		err := srv.CancelOrder(orderId)
+		assert.Nil(t, err)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("data not found", func(t *testing.T) {
+		repo.On("CancelOrder", orderId).Return(errors.New("not found")).Once()
+
+		srv := New(repo)
+		err := srv.CancelOrder(orderId)
+		assert.NotNil(t, err)
+		assert.Contains(t, err.Error(), "bad request")
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("server problem", func(t *testing.T) {
+		repo.On("CancelOrder", orderId).Return(errors.New("server problem")).Once()
+
+		srv := New(repo)
+		err := srv.CancelOrder(orderId)
+		assert.NotNil(t, err)
+		assert.Contains(t, err.Error(), "server problem")
+		repo.AssertExpectations(t)
+	})
+}

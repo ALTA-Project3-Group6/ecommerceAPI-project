@@ -41,6 +41,20 @@ func (_m *OrderService) Add(token interface{}, totalPrice float64) (order.Core, 
 	return r0, r1, r2
 }
 
+// CancelOrder provides a mock function with given fields: orderid
+func (_m *OrderService) CancelOrder(orderid uint) error {
+	ret := _m.Called(orderid)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+		r0 = rf(orderid)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetOrderHistory provides a mock function with given fields: token
 func (_m *OrderService) GetOrderHistory(token interface{}) ([]order.Core, error) {
 	ret := _m.Called(token)
