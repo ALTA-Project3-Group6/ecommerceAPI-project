@@ -23,12 +23,12 @@ type CartService interface {
 	AddCart(token interface{}, productId uint, newCart Core) (Core, error)
 	ShowCart(token interface{}) ([]Core, error)
 	UpdateCart(token interface{}, cartId uint, updCart Core) (Core, error)
-	DeleteCart(token interface{}, cartId uint) error
+	DeleteCart(token interface{}) error
 }
 
 type CartData interface {
 	AddCart(userId uint, productId uint, newCart Core) (Core, error)
 	ShowCart(userId uint) ([]Core, error)
 	UpdateCart(userId uint, cartId uint, updCart Core) (Core, error)
-	DeleteCart(userId uint, cartId uint) error
+	DeleteCart(userId uint) error
 }

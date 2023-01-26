@@ -85,14 +85,14 @@ func (cc *cartControl) UpdateCart() echo.HandlerFunc {
 func (cc *cartControl) DeleteCart() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Get("user")
-		input := c.Param("id_product")
-		cnv, err := strconv.Atoi(input)
-		if err != nil {
-			log.Println("\tRead param error: ", err.Error())
-			return c.JSON(http.StatusBadRequest, "wrong product id parameter")
-		}
+		// input := c.Param("id_product")
+		// cnv, err := strconv.Atoi(input)
+		// if err != nil {
+		// 	log.Println("\tRead param error: ", err.Error())
+		// 	return c.JSON(http.StatusBadRequest, "wrong product id parameter")
+		// }
 
-		err = cc.srv.DeleteCart(token, uint(cnv))
+		err := cc.srv.DeleteCart(token)
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
 				log.Println("error calling delete product service: ", err.Error())
