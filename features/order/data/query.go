@@ -181,21 +181,13 @@ func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus s
 	return nil
 }
 func (oq *orderQuery) CancelOrder(orderId uint) error {
-	tx := oq.db.Begin()
 	input := Order{}
-	if err := tx.Where("id = ?", orderId).First(&input).Error; err != nil {
+	err := oq.db.Where("id = ?", orderId).First(&input).Error
+	if err != nil {
 		log.Println("error select order: ", err.Error())
 		return errors.New("order not found")
 	}
 	input.OrderStatus = "cancelled"
-	tx.Save(&input)
-
-	c := config.MidtransCoreAPIClient()
-	if _, err := c.CancelTransaction(input.TransactionId); err != nil {
-		tx.Rollback()
-		log.Println("error cancel midtrans order: ", err.Error())
-		return errors.New("cancel midtrans order error")
-	}
-	tx.Commit()
+	oq.db.Save(&input)
 	return nil
 }
