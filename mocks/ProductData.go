@@ -94,29 +94,6 @@ func (_m *ProductData) GetProductById(productId uint) (product.Core, error) {
 	return r0, r1
 }
 
-// GetUserProducts provides a mock function with given fields: userId
-func (_m *ProductData) GetUserProducts(userId uint) ([]product.Core, error) {
-	ret := _m.Called(userId)
-
-	var r0 []product.Core
-	if rf, ok := ret.Get(0).(func(uint) []product.Core); ok {
-		r0 = rf(userId)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]product.Core)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(userId)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // Update provides a mock function with given fields: userId, productId, updProduct, productImage
 func (_m *ProductData) Update(userId uint, productId uint, updProduct product.Core, productImage *multipart.FileHeader) (product.Core, error) {
 	ret := _m.Called(userId, productId, updProduct, productImage)

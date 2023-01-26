@@ -92,7 +92,12 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 			GrossAmt: int64(totalPrice),
 		},
 	}
-	snapResp, _ := s.CreateTransaction(req)
+	snapResp, err := s.CreateTransaction(req)
+	if err != nil {
+		tx.Rollback()
+		log.Println("error making midtrans transaction: ", err.Error())
+		return order.Core{}, "", err
+	}
 
 	// commit tx transaksi
 	tx.Commit()
