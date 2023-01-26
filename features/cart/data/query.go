@@ -33,7 +33,7 @@ func (cq *cartQuery) AddCart(userId uint, productId uint, newCart cart.Core) (ca
 
 func (cq *cartQuery) ShowCart(userId uint) ([]cart.Core, error) {
 	allcart := []cart.Core{}
-	err := cq.db.Raw("SELECT carts.id, carts.user_id, carts.product_id, products.name products_name, products.price, carts.quantity, (SELECT users.name FROM users JOIN products ON users.id = products.user_id) seller_name FROM carts JOIN products ON carts.product_id = products.id WHERE carts.user_id = 1;").Scan(&allcart).Error
+	err := cq.db.Raw("SELECT carts.id, carts.user_id, carts.product_id, products.name products_name, products.price, carts.quantity, (SELECT users.name FROM users JOIN products ON users.id = products.user_id) seller_name FROM carts JOIN products ON carts.product_id = products.id WHERE carts.user_id = ?", userId).Scan(&allcart).Error
 	if err != nil {
 		log.Println("\terror query get all cart: ", err.Error())
 		return []cart.Core{}, err
