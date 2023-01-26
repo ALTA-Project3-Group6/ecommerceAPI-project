@@ -9,6 +9,10 @@ type AddCartReq struct {
 	Price     float64 `json:"price" form:"price"`
 }
 
+type UpdCartReq struct {
+	Quantity int `json:"quantity" form:"quantity"`
+}
+
 func ToCore(data interface{}) *cart.Core {
 	res := cart.Core{}
 
@@ -19,6 +23,9 @@ func ToCore(data interface{}) *cart.Core {
 		res.ProductID = cnv.ProductID
 		res.Quantity = cnv.Quantity
 		res.Price = cnv.Price
+	case UpdCartReq:
+		cnv := data.(UpdCartReq)
+		res.Quantity = cnv.Quantity
 	default:
 		return nil
 	}
