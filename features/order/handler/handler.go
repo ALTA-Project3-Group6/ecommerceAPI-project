@@ -73,7 +73,7 @@ func (oh *OrderHandle) GetSellingHistory() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Get("user")
 
-		res, err := oh.srv.GetOrderHistory(token)
+		res, err := oh.srv.GetSellingHistory(token)
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
 				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (data not found)"))
