@@ -108,6 +108,7 @@ func ReadEnv() *AppConfig {
 		JWT_KEY = app.jwtKey
 		KEYID = app.keyid
 		ACCESSKEY = app.accesskey
+		MIDTRANSSERVERKEY = app.midtransserverkey
 	}
 
 	return &app

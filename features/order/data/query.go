@@ -28,6 +28,14 @@ func New(db *gorm.DB) order.OrderData {
 func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, error) {
 	tx := oq.db.Begin()
 
+	// mengambil cart user
+	userCart := []cart.Cart{}
+	if err := tx.Where("user_id = ?", userId).Find(&userCart).Error; err != nil {
+		tx.Rollback()
+		log.Println("error retrieve user cart: ", err.Error())
+		return order.Core{}, "", err
+	}
+
 	// membuat order
 	orderinput := Order{
 		BuyerId:     userId,
@@ -35,6 +43,12 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 		CreatedAt:   time.Now(),
 		TotalPrice:  totalPrice,
 	}
+	// mengisi seller_id di order
+	product := product.Product{}
+	tx.First(&product, userCart[0].ProductID)
+	orderinput.SellerId = product.UserId
+	// tx.Save(&orderinput)
+	//input order ke tabel
 	if err := tx.Create(&orderinput).Error; err != nil {
 		tx.Rollback()
 		log.Println("error add order query: ", err.Error())
@@ -44,20 +58,6 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	// update transactionid di database
 	// tx.First(&orderinput)
 	orderinput.TransactionId = "Transaction-" + fmt.Sprint(orderinput.ID)
-	tx.Save(&orderinput)
-
-	// mengambil cart user
-	userCart := []cart.Cart{}
-	if err := tx.Where("user_id = ?", userId).Find(&userCart).Error; err != nil {
-		tx.Rollback()
-		log.Println("error retrieve user cart: ", err.Error())
-		return order.Core{}, "", err
-	}
-
-	// mengisi seller_id di order
-	product := product.Product{}
-	tx.First(&product, userCart[0].ProductID)
-	orderinput.SellerId = product.UserId
 	tx.Save(&orderinput)
 
 	// membuat orderproduct
@@ -71,7 +71,7 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 		}
 		orderProducts = append(orderProducts, orderProduct)
 	}
-	if err := oq.db.Create(&orderProducts).Error; err != nil {
+	if err := tx.Create(&orderProducts).Error; err != nil {
 		tx.Rollback()
 		log.Println("error create orderproduct: ", err.Error())
 		return order.Core{}, "", err

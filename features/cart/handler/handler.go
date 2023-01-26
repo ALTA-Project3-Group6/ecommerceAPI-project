@@ -31,7 +31,7 @@ func (cc *cartControl) AddCart() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input"))
 		}
 
-		res, err := cc.srv.AddCart(token, *ToCore(input))
+		res, err := cc.srv.AddCart(token, input.ProductID, *ToCore(input))
 		if err != nil {
 			log.Println("\terror running add product service: ", err.Error())
 			return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
@@ -61,11 +61,12 @@ func (cc *cartControl) ShowCart() echo.HandlerFunc {
 		})
 	}
 }
+
 // func (cc *cartControl) UpdateCart() echo.HandlerFunc {
 // 	return func(c echo.Context) error {
 
-// 	}
-// }
+//		}
+//	}
 func (cc *cartControl) DeleteCart() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Get("user")
