@@ -62,11 +62,26 @@ func (cc *cartControl) ShowCart() echo.HandlerFunc {
 	}
 }
 
-// func (cc *cartControl) UpdateCart() echo.HandlerFunc {
-// 	return func(c echo.Context) error {
+func (cc *cartControl) UpdateCart() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		paramId := c.Param("id")
+		cartId, _ := strconv.Atoi(paramId)
+		input := UpdCartReq{}
+		err := c.Bind(&input)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		}
 
-//		}
-//	}
+		res, err := cc.srv.UpdateCart(c.Get("user"), uint(cartId), *ToCore(input))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+		}
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"data":    res,
+			"message": "success change quantity data",
+		})
+	}
+}
 func (cc *cartControl) DeleteCart() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Get("user")
