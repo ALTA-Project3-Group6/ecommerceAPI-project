@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -112,5 +113,29 @@ func (oh *OrderHandle) NotificationTransactionStatus() echo.HandlerFunc {
 		}
 
 		return c.JSON(c.Response().Write([]byte("ok")))
+	}
+}
+func (oh *OrderHandle) CancelOrder() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		oid := c.Param("order_id")
+
+		orderId, err := strconv.Atoi(oid)
+		if err != nil {
+			log.Println("error read parameter: ", err.Error())
+			return c.JSON(http.StatusBadRequest, helper.ErrorResponse("fail to read parameter"))
+		}
+
+		err = oh.srv.CancelOrder(uint(orderId))
+		if err != nil {
+			if strings.Contains(err.Error(), "bad request") {
+				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (bad request)"))
+			} else {
+				return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success delete order",
+		})
 	}
 }
