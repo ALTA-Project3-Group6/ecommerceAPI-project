@@ -833,10 +833,29 @@ paths:
     put:
       tags:
         - "Orders"
-      summary: "cancel order"
-      description: "cancel order"
+      summary: "update order status"
+      description: "update order status"
       security:
         - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_status: 
+                  type: string
+            example:
+              order_status: "canceled"
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                order_status: 
+                  type: string
+            example:
+              order_status: "canceled"
       responses: 
         200:
           description: "success cancel order"
@@ -845,7 +864,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/responseObject'
               example:
-                message: "success cancel order"
+                message: "success update order status"
         400:
           $ref: '#/components/responses/400'
         500:
