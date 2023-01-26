@@ -1,8 +1,3 @@
-# YSHOP APP
-
-This is a golang rest api project group organized by Alterra Academy. This API is used to run YSHOP applications. This application has features as below.
-
-
 
 ### Build App & Database
 
@@ -18,6 +13,11 @@ This is a golang rest api project group organized by Alterra Academy. This API i
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![Midtrans](https://img.shields.io/badge/Midtrans-FF6C37?style=for-the-badge&logo=midtrans&logoColor=white)
+
+# YSHOP APP
+
+This is a golang rest api project group organized by Alterra Academy. This API is used to run YSHOP applications. This application has features as below.
+
 
 # Features
 ## User:
@@ -111,7 +111,7 @@ This is a golang rest api project group organized by Alterra Academy. This API i
 
 
 # ERD
-<img src="ERD.png">
+<img src="image/ERD.png">
 
 # API Documentations
 
@@ -131,6 +131,8 @@ $ git clone https://github.com/ALTA-Project3-Group6/ecommerceAPI-project
 ```
 $ cd ecommerceAPI-project
 ```
+# UNIT TEST COVERAGE
+<img src="image/unittest.png">
 
 ## Authors 👑
 
