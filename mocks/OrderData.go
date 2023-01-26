@@ -41,6 +41,20 @@ func (_m *OrderData) Add(userId uint, totalPrice float64) (order.Core, string, e
 	return r0, r1, r2
 }
 
+// CancelOrder provides a mock function with given fields: orderid
+func (_m *OrderData) CancelOrder(orderid uint) error {
+	ret := _m.Called(orderid)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+		r0 = rf(orderid)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetOrderHistory provides a mock function with given fields: userId
 func (_m *OrderData) GetOrderHistory(userId uint) ([]order.Core, error) {
 	ret := _m.Called(userId)

@@ -23,6 +23,7 @@ type OrderHandler interface {
 	GetOrderHistory() echo.HandlerFunc
 	GetSellingHistory() echo.HandlerFunc
 	NotificationTransactionStatus() echo.HandlerFunc
+	CancelOrder() echo.HandlerFunc
 }
 
 type OrderService interface {
@@ -30,6 +31,7 @@ type OrderService interface {
 	GetOrderHistory(token interface{}) ([]Core, error)
 	GetSellingHistory(token interface{}) ([]Core, error)
 	NotificationTransactionStatus(transactionId string) error
+	CancelOrder(orderid uint) error
 }
 
 type OrderData interface {
@@ -37,4 +39,5 @@ type OrderData interface {
 	GetOrderHistory(userId uint) ([]Core, error)
 	GetSellingHistory(userId uint) ([]Core, error)
 	NotificationTransactionStatus(transactionId, transStatus string) error
+	CancelOrder(orderid uint) error
 }

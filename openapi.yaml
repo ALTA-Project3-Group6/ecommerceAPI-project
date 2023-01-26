@@ -758,7 +758,7 @@ paths:
           $ref: '#/components/responses/400'
         500:
           $ref: '#/components/responses/500'
-    
+        
   /sales:
     get:
       tags: 
@@ -824,6 +824,28 @@ paths:
                 $ref: '#/components/schemas/responseObject'
               example:
                 message: "success handling payment notification"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+  /orders/{order_id}:
+    put:
+      tags:
+        - "Orders"
+      summary: "cancel order"
+      description: "cancel order"
+      security:
+        - JWTAuth: []
+      responses: 
+        200:
+          description: "success cancel order"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseObject'
+              example:
+                message: "success cancel order"
         400:
           $ref: '#/components/responses/400'
         500:
