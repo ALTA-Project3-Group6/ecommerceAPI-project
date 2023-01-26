@@ -13,7 +13,7 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/icxz1/E-commerceAPI/1.0.0
   - description: main url
-    url: link will be updated soon
+    url: https://bluepath.my.id
     
 
 
@@ -322,7 +322,7 @@ paths:
                   price: 3500
                   product_image: "indomie_goreng.png"
                   user:
-                    user_id: 1
+                    id_user: 1
                     name: "alfian aditya"
                 message: "success add product"
         400:
@@ -351,7 +351,7 @@ paths:
                     price: 3100
                     product_image: "indomie_goreng.png"
                     user:
-                      user_id: 1
+                      id_user: 1
                       name: "alfian aditya"
                   - id: 2
                     name: "Pulpen Joyko"
@@ -360,7 +360,7 @@ paths:
                     price: 2500
                     product_image: "pulpen.png"
                     user:
-                      user_id: 1
+                      id_user: 1
                       name: "alfian aditya"
                   - id: 3
                     name: "Samsung galaxy S23 ultra"
@@ -369,7 +369,7 @@ paths:
                     price: 28000000
                     product_image: "samsung_s23_ultra.png"
                     user:
-                      user_id: 1
+                      id_user: 1
                       name: "alfian aditya"
                 message: "success show all products"
         400:
@@ -467,7 +467,7 @@ paths:
                   price: 3100
                   product_image: "indomie_goreng.png"
                   user:
-                    user_id: 1
+                    id_user: 1
                     name: "alfian aditya"
                 message: "success show detail product"
         404:
@@ -581,7 +581,7 @@ paths:
                   id: 1
                   quantity: 2
                   total_price : 20500
-                  user_id: 2
+                  id_user: 2
                   product:
                     - id_product: 1
                       name: "indomie goreng"
@@ -707,8 +707,8 @@ paths:
               example:
                 data:
                   id: 1
-                  buyer_id: 1
-                  seller_id: 2
+                  id_buyer: 1
+                  id_seller: 2
                   total_price: 20500
                   created_at: "2023-01-26T02:11:48"
                   redirect_url: "https://app.sandbox.midtrans.com/snap/v3/redirection/b95128fb-f2ef-4e57-bd89-c4a187cca536"
@@ -736,22 +736,22 @@ paths:
               example:
                 data:
                   - id: 1
-                    buyer_id: 2
+                    id_buyer: 2
                     buyer_name: "wildan"
-                    seller_id: 2
+                    id_seller: 2
                     seller_name: "fauzan"
                     total_price : 20500
                     created_at: "2023-01-26T02:11:48"
-                    user_id: 2
+                    id_user: 2
                     order_status: "waiting payment"
                   - id: 2
-                    buyer_id: 2
+                    id_buyer: 2
                     buyer_name: "wildan"
-                    seller_id: 2
+                    id_seller: 2
                     seller_name: "fauzan"
                     total_price : 20500
                     created_at: "2023-01-26T02:11:48"
-                    user_id: 2
+                    id_user: 2
                     order_status: "canceled"
                 message: "success show order history"
         400:
@@ -777,22 +777,22 @@ paths:
               example:
                 data:
                   - id: 1
-                    buyer_id: 2
+                    id_buyer: 2
                     buyer_name: "alfian"
-                    seller_id: 2
+                    id_seller: 2
                     seller_name: "fauzan"
                     total_price : 20500
                     created_at: "2023-01-26T02:11:48"
-                    user_id: 2
+                    id_user: 2
                     order_status: "waiting payment"
                   - id: 2
-                    buyer_id: 3
+                    id_buyer: 3
                     buyer_name: "wildan"
-                    seller_id: 2
+                    id_seller: 2
                     seller_name: "fauzan"
                     total_price : 20500
                     created_at: "2023-01-26T02:11:48"
-                    user_id: 2
+                    id_user: 2
                     order_status: "transaction success"
         400:
           $ref: '#/components/responses/400'
@@ -812,7 +812,7 @@ paths:
             schema:
               type: object
               properties:
-                order_id:
+                id_order:
                       type: string
                       example: "transaction-1"
       responses:
@@ -829,33 +829,23 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-  /orders/{order_id}:
+  /orders/{id_order}:
     put:
       tags:
         - "Orders"
-      summary: "update order status"
-      description: "update order status"
+      summary: "cancel order"
+      description: "cancel order"
       security:
         - JWTAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                order_status: 
-                  type: string
-            example:
-              order_status: "canceled"
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                order_status: 
-                  type: string
-            example:
-              order_status: "canceled"
+      parameters:
+        - name: id_order
+          description: "id order"
+          required: true
+          in: path
+          schema:
+            description: "id order"
+            type: string
+            example: 1
       responses: 
         200:
           description: "success cancel order"
@@ -864,7 +854,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/responseObject'
               example:
-                message: "success update order status"
+                message: "success cancel order"
         400:
           $ref: '#/components/responses/400'
         500:
