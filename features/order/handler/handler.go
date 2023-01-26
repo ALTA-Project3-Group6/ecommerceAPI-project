@@ -23,8 +23,8 @@ func New(os order.OrderService) order.OrderHandler {
 
 func (oh *OrderHandle) Add() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var totalPrice float64
-		if err := c.Bind(&totalPrice); err != nil {
+		input := OrderReq{}
+		if err := c.Bind(&input); err != nil {
 			log.Println("error bind totalrpice: ", err.Error())
 			return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (bad request)"))
 		}
@@ -35,7 +35,7 @@ func (oh *OrderHandle) Add() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (bad request)"))
 		}
 
-		res, url, err := oh.srv.Add(token, totalPrice)
+		res, url, err := oh.srv.Add(token, input.TotalPrice)
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
 				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (bad request)"))

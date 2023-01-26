@@ -4,7 +4,6 @@ import (
 	"ecommerceapi/config"
 	cart "ecommerceapi/features/cart/data"
 	"ecommerceapi/features/order"
-	"ecommerceapi/features/orderproduct"
 	product "ecommerceapi/features/product/data"
 	"errors"
 	"fmt"
@@ -57,16 +56,16 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 
 	// mengisi seller_id di order
 	product := product.Product{}
-	tx.First(&product, userCart[0].ProductId)
+	tx.First(&product, userCart[0].ProductID)
 	orderinput.SellerId = product.UserId
 	tx.Save(&orderinput)
 
 	// membuat orderproduct
-	orderProducts := []orderproduct.Core{}
+	orderProducts := []OrderProduct{}
 	for _, item := range userCart {
-		orderProduct := orderproduct.Core{
+		orderProduct := OrderProduct{
 			OrderId:   orderinput.ID,
-			ProductId: item.ProductId,
+			ProductId: item.ProductID,
 			Quantity:  item.Quantity,
 			Price:     item.Price,
 		}
@@ -123,9 +122,9 @@ func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
 	return orders, nil
 }
 func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus string) error {
-	order := order.Core{}
+	order := Order{}
 
-	oq.db.First(&order, transactionId)
+	oq.db.First(&order, "transaction_id = ?", transactionId)
 
 	// 5. Do set transaction status based on response from check transaction status
 	if transStatus == "capture" {
@@ -154,6 +153,18 @@ func (oq *orderQuery) NotificationTransactionStatus(transactionId, transStatus s
 	if aff.RowsAffected <= 0 {
 		log.Println("error update order status, no rows affected")
 		return errors.New("error update order status")
+	}
+
+	//update product stock
+	if order.OrderStatus == "success" {
+		orderProducts := []OrderProduct{}
+		oq.db.Find(&orderProducts, "order_id = ?", order.ID)
+		for _, item := range orderProducts {
+			prod := product.Product{}
+			oq.db.First(&prod, item.ProductId)
+			prod.Stock -= item.Quantity
+			oq.db.Save(&prod)
+		}
 	}
 
 	return nil
