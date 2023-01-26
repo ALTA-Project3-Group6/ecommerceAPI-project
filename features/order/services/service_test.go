@@ -60,6 +60,24 @@ func TestAdd(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 
+	t.Run("bad request", func(t *testing.T) {
+		repo.On("Add", uint(1), totalPrice).Return(order.Core{}, "", errors.New("bad request")).Once()
+
+		_, token := helper.GenerateJWT(1)
+
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+
+		srv := New(repo)
+
+		res, redirectURL, err := srv.Add(pToken, totalPrice)
+		assert.NotNil(t, err)
+		assert.Equal(t, uint(0), res.ID)
+		assert.Equal(t, "", redirectURL)
+		assert.Contains(t, err.Error(), "bad")
+		repo.AssertExpectations(t)
+	})
+
 	t.Run("server problem", func(t *testing.T) {
 		repo.On("Add", uint(1), totalPrice).Return(order.Core{}, "", errors.New("server problem")).Once()
 

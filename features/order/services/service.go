@@ -28,8 +28,14 @@ func (os *orderSvc) Add(token interface{}, totalPrice float64) (order.Core, stri
 
 	res, redirectURL, err := os.qry.Add(uint(userId), totalPrice)
 	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "bad request") {
+			msg = "bad request"
+		} else {
+			msg = "server problem"
+		}
 		log.Println("error add order query in service : ", err.Error())
-		return order.Core{}, "", errors.New("server problem")
+		return order.Core{}, "", errors.New(msg)
 	}
 
 	return res, redirectURL, nil

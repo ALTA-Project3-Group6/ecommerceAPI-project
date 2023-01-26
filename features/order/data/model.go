@@ -15,6 +15,7 @@ type Order struct {
 	CreatedAt     time.Time
 	OrderStatus   string
 	TransactionId string
+	PaymentURL    string
 
 	Seller user.User `gorm:"foreignkey:SellerId;association_foreignkey:ID"`
 	Buyer  user.User `gorm:"foreignkey:BuyerId;association_foreignkey:ID"`

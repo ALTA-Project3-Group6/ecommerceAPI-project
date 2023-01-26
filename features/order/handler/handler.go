@@ -37,7 +37,7 @@ func (oh *OrderHandle) Add() echo.HandlerFunc {
 
 		res, url, err := oh.srv.Add(token, input.TotalPrice)
 		if err != nil {
-			if strings.Contains(err.Error(), "not found") {
+			if strings.Contains(err.Error(), "bad request") || strings.Contains(err.Error(), "not found") {
 				return c.JSON(http.StatusBadRequest, helper.ErrorResponse("wrong input (bad request)"))
 			} else {
 				return c.JSON(http.StatusInternalServerError, helper.ErrorResponse("server problem"))
