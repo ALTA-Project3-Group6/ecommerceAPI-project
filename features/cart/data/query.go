@@ -60,8 +60,8 @@ func (cq *cartQuery) UpdateCart(userId uint, cartId uint, updCart cart.Core) (ca
 	return DataToCore(cnvC), nil
 }
 
-func (cq *cartQuery) DeleteCart(userId uint, cartId uint) error {
-	qry := cq.db.Where("user_id = ?", userId).Delete(&Cart{}, cartId)
+func (cq *cartQuery) DeleteCart(userId uint) error {
+	qry := cq.db.Where("user_id = ?", userId).Delete(&Cart{})
 
 	if aff := qry.RowsAffected; aff <= 0 {
 		log.Println("\tno rows affected: data not found")

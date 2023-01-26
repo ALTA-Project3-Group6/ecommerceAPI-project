@@ -67,7 +67,7 @@ func main() {
 	//cart
 	e.POST("/carts", cartHdl.AddCart(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.GET("/carts", cartHdl.ShowCart(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.DELETE("/carts/:id_user", cartHdl.DeleteCart(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.DELETE("/carts", cartHdl.DeleteCart(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.PUT("/carts/:id_carts", cartHdl.UpdateCart(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	//order

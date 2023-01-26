@@ -74,14 +74,14 @@ func (cs *cartSvc) UpdateCart(token interface{}, cartId uint, updCart cart.Core)
 	return res, nil
 }
 
-func (cs *cartSvc) DeleteCart(token interface{}, cartId uint) error {
+func (cs *cartSvc) DeleteCart(token interface{}) error {
 	userID := helper.ExtractToken(token)
 	if userID <= 0 {
 		log.Println("\terror extract token delete cart service")
 		return errors.New("user not found")
 	}
 
-	err := cs.qry.DeleteCart(uint(userID), cartId)
+	err := cs.qry.DeleteCart(uint(userID))
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
