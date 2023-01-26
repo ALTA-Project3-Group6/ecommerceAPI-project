@@ -38,7 +38,6 @@ func (cq *cartQuery) ShowCart(userId uint) ([]cart.Core, error) {
 		log.Println("\terror query get all cart: ", err.Error())
 		return []cart.Core{}, err
 	}
-	log.Println("DEBUG: ", allcart)
 	return allcart, nil
 }
 
