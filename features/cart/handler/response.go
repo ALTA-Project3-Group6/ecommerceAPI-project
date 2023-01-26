@@ -42,6 +42,6 @@ func CoreToCartResp(data cart.Core) CartsResp {
 		Quantity:     data.Quantity,
 		Price:        data.Price,
 		Product:      ProductsSellerRes{ProductId: data.ProductID, ProductName: data.ProductName},
-		Seller:       SellerProductsRes{UserId: data.UserID, UserName: data.SellerName},
+		Seller:       SellerProductsRes{UserId: data.SellerID, UserName: data.SellerName},
 	}
 }
