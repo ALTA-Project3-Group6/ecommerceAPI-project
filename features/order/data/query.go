@@ -102,7 +102,7 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 func (oq *orderQuery) GetOrderHistory(userId uint) ([]order.Core, error) {
 	orders := []order.Core{}
 
-	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u.id WHERE o.buyer_id = ?", userId).Scan(&orders).Error
+	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u2.id WHERE o.buyer_id = ?", userId).Scan(&orders).Error
 	if err != nil {
 		log.Println("error query select order hisoty: ", err.Error())
 		return []order.Core{}, err
@@ -113,7 +113,7 @@ func (oq *orderQuery) GetOrderHistory(userId uint) ([]order.Core, error) {
 func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
 	orders := []order.Core{}
 
-	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u.id WHERE o.seller_id = ?", userId).Scan(&orders).Error
+	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u2.id WHERE o.seller_id = ?", userId).Scan(&orders).Error
 	if err != nil {
 		log.Println("error query select order hisoty: ", err.Error())
 		return []order.Core{}, err
