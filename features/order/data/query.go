@@ -99,6 +99,12 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 		return order.Core{}, "", err
 	}
 
+	// save payment URL
+	if snapResp.RedirectURL != "" {
+		orderinput.PaymentURL = snapResp.RedirectURL
+		tx.Save(&orderinput)
+	}
+
 	// commit tx transaksi
 	tx.Commit()
 
