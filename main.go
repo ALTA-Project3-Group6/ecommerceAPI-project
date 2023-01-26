@@ -2,6 +2,9 @@ package main
 
 import (
 	"ecommerceapi/config"
+	cd "ecommerceapi/features/cart/data"
+	ch "ecommerceapi/features/cart/handler"
+	cs "ecommerceapi/features/cart/services"
 	od "ecommerceapi/features/order/data"
 	oh "ecommerceapi/features/order/handler"
 	os "ecommerceapi/features/order/services"
@@ -36,6 +39,10 @@ func main() {
 	orderSrv := os.New(orderData)
 	orderHdl := oh.New(orderSrv)
 
+	cartData := cd.New(db)
+	cartSrv := cs.New(cartData)
+	cartHdl := ch.New(cartSrv)
+
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -56,6 +63,9 @@ func main() {
 	e.PUT("/products/:id_product", prodHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.GET("/products/:id_product", prodHdl.GetProductById())
 	e.DELETE("/products/:id_product", prodHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
+
+	//cart
+	e.POST("/carts", cartHdl.AddCart(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	//order
 	e.POST("/orders", orderHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
