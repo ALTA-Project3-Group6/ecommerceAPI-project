@@ -276,34 +276,34 @@ func TestNotificationTransaction(t *testing.T) {
 	// })
 }
 
-func TestCancelOrder(t *testing.T) {
+func TestUpdateStatus(t *testing.T) {
 	repo := mocks.NewOrderData(t)
 	orderId := uint(1)
 
-	t.Run("success cancel order", func(t *testing.T) {
-		repo.On("CancelOrder", orderId).Return(nil).Once()
+	t.Run("success update status", func(t *testing.T) {
+		repo.On("UpdateStatus", orderId, "canceled").Return(nil).Once()
 
 		srv := New(repo)
-		err := srv.CancelOrder(orderId)
+		err := srv.UpdateStatus(orderId, "canceled")
 		assert.Nil(t, err)
 		repo.AssertExpectations(t)
 	})
 
 	t.Run("data not found", func(t *testing.T) {
-		repo.On("CancelOrder", orderId).Return(errors.New("not found")).Once()
+		repo.On("UpdateStatus", orderId, "canceled").Return(errors.New("not found")).Once()
 
 		srv := New(repo)
-		err := srv.CancelOrder(orderId)
+		err := srv.UpdateStatus(orderId, "canceled")
 		assert.NotNil(t, err)
 		assert.Contains(t, err.Error(), "bad request")
 		repo.AssertExpectations(t)
 	})
 
 	t.Run("server problem", func(t *testing.T) {
-		repo.On("CancelOrder", orderId).Return(errors.New("server problem")).Once()
+		repo.On("UpdateStatus", orderId, "canceled").Return(errors.New("server problem")).Once()
 
 		srv := New(repo)
-		err := srv.CancelOrder(orderId)
+		err := srv.UpdateStatus(orderId, "canceled")
 		assert.NotNil(t, err)
 		assert.Contains(t, err.Error(), "server problem")
 		repo.AssertExpectations(t)
