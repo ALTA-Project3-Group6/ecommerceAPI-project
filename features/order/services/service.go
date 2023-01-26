@@ -62,7 +62,7 @@ func (os *orderSvc) GetSellingHistory(token interface{}) ([]order.Core, error) {
 		return []order.Core{}, errors.New("user not found")
 	}
 
-	res, err := os.qry.GetOrderHistory(uint(userId))
+	res, err := os.qry.GetSellingHistory(uint(userId))
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
