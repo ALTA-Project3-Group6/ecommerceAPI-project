@@ -3,13 +3,15 @@ package cart
 import "github.com/labstack/echo/v4"
 
 type Core struct {
-	ID          uint
-	UserID      uint
-	ProductID   uint
-	Price       float64
-	Quantity    int
-	ProductName string
-	SellerName  string
+	ID           uint    `json:"id" form:"id"`
+	UserID       uint    `json:"user_id" form:"user_id"`
+	SellerID     uint    `json:"seller_id" form:"seller_id"`
+	ProductID    uint    `json:"product_id" form:"product_id"`
+	ProductImage string  `json:"product_image" form:"product_image"`
+	Price        float64 `json:"price" form:"price"`
+	Quantity     int     `json:"quantity" form:"quantity"`
+	ProductName  string  `json:"product_name" form:"product_name"`
+	SellerName   string  `json:"seller_name" form:"seller_name"`
 }
 
 type CartHandler interface {
