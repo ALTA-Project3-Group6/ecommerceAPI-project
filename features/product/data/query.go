@@ -94,9 +94,10 @@ func (pq *productQuery) GetAllProducts() ([]product.Core, error) {
 
 	return allprod, nil
 }
-func (pq *productQuery) GetUserProducts(userId uint) ([]product.Core, error) {
-	return []product.Core{}, nil
-}
+
+//	func (pq *productQuery) GetUserProducts(userId uint) ([]product.Core, error) {
+//		return []product.Core{}, nil
+//	}
 func (pq *productQuery) GetProductById(productId uint) (product.Core, error) {
 	prod := product.Core{}
 	err := pq.db.Raw("SELECT p.id, p.user_id, u.name user_name, p.name, product_image, description, stock, price FROM products p JOIN users u ON u.id = p.user_id WHERE p.deleted_at IS NULL AND p.id = ?", productId).Scan(&prod).Error

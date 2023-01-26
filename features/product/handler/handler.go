@@ -132,9 +132,10 @@ func (pc *productControl) GetAllProducts() echo.HandlerFunc {
 		})
 	}
 }
-func (pc *productControl) GetUserProducts() echo.HandlerFunc {
-	return nil
-}
+
+//	func (pc *productControl) GetUserProducts() echo.HandlerFunc {
+//		return nil
+//	}
 func (pc *productControl) GetProductById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		input := c.Param("id_product")
