@@ -34,13 +34,13 @@ func (_m *CartData) AddCart(userId uint, productId uint, newCart cart.Core) (car
 	return r0, r1
 }
 
-// DeleteCart provides a mock function with given fields: userId, cartId
-func (_m *CartData) DeleteCart(userId uint, cartId uint) error {
-	ret := _m.Called(userId, cartId)
+// DeleteCart provides a mock function with given fields: userId
+func (_m *CartData) DeleteCart(userId uint) error {
+	ret := _m.Called(userId)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
-		r0 = rf(userId, cartId)
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+		r0 = rf(userId)
 	} else {
 		r0 = ret.Error(0)
 	}

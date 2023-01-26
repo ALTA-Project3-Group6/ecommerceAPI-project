@@ -34,13 +34,13 @@ func (_m *CartService) AddCart(token interface{}, productId uint, newCart cart.C
 	return r0, r1
 }
 
-// DeleteCart provides a mock function with given fields: token, cartId
-func (_m *CartService) DeleteCart(token interface{}, cartId uint) error {
-	ret := _m.Called(token, cartId)
+// DeleteCart provides a mock function with given fields: token
+func (_m *CartService) DeleteCart(token interface{}) error {
+	ret := _m.Called(token)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(interface{}, uint) error); ok {
-		r0 = rf(token, cartId)
+	if rf, ok := ret.Get(0).(func(interface{}) error); ok {
+		r0 = rf(token)
 	} else {
 		r0 = ret.Error(0)
 	}
