@@ -73,20 +73,20 @@ func (_m *ProductData) GetAllProducts() ([]product.Core, error) {
 	return r0, r1
 }
 
-// GetProductById provides a mock function with given fields: userId, productId
-func (_m *ProductData) GetProductById(userId uint, productId uint) (product.Core, error) {
-	ret := _m.Called(userId, productId)
+// GetProductById provides a mock function with given fields: productId
+func (_m *ProductData) GetProductById(productId uint) (product.Core, error) {
+	ret := _m.Called(productId)
 
 	var r0 product.Core
-	if rf, ok := ret.Get(0).(func(uint, uint) product.Core); ok {
-		r0 = rf(userId, productId)
+	if rf, ok := ret.Get(0).(func(uint) product.Core); ok {
+		r0 = rf(productId)
 	} else {
 		r0 = ret.Get(0).(product.Core)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uint, uint) error); ok {
-		r1 = rf(userId, productId)
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(productId)
 	} else {
 		r1 = ret.Error(1)
 	}

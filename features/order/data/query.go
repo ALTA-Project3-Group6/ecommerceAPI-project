@@ -56,7 +56,7 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 
 	// mengisi seller_id di order
 	product := product.Product{}
-	tx.First(&product, userCart[0].ProductId)
+	tx.First(&product, userCart[0].ProductID)
 	orderinput.SellerId = product.UserId
 	tx.Save(&orderinput)
 
@@ -65,7 +65,7 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	for _, item := range userCart {
 		orderProduct := OrderProduct{
 			OrderId:   orderinput.ID,
-			ProductId: item.ProductId,
+			ProductId: item.ProductID,
 			Quantity:  item.Quantity,
 			Price:     item.Price,
 		}
