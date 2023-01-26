@@ -103,7 +103,7 @@ This is a golang rest api project group organized by Alterra Academy. This API i
 | POST | /orders | - | YES | This is how users add orders to transaction. |
 | GET | /orders  | - | YES | This is how users show order history.  |
 | DELETE | /sales | - | YES | This is how seller sales history. |
-| PUT | /paymentnotification | - | - | Users edit their product quantity in cart. |
+| POST | /paymentnotification | - | - | Handling payment notification from midtrans. |
 
 </details>
 
