@@ -39,14 +39,14 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	// membuat order
 	orderinput := Order{
 		BuyerId:     userId,
-		OrderStatus: "Waiting For Payment",
+		OrderStatus: "waiting for payment",
 		CreatedAt:   time.Now(),
 		TotalPrice:  totalPrice,
 	}
 	// mengisi seller_id di order
-	product := product.Product{}
-	tx.First(&product, userCart[0].ProductID)
-	orderinput.SellerId = product.UserId
+	productSell := product.Product{}
+	tx.First(&productSell, userCart[0].ProductID)
+	orderinput.SellerId = productSell.UserId
 	// tx.Save(&orderinput)
 	//input order ke tabel
 	if err := tx.Create(&orderinput).Error; err != nil {
@@ -63,11 +63,13 @@ func (oq *orderQuery) Add(userId uint, totalPrice float64) (order.Core, string, 
 	// membuat orderproduct
 	orderProducts := []OrderProduct{}
 	for _, item := range userCart {
+		productPrice := product.Product{}
+		tx.First(&productPrice, item.ProductID)
 		orderProduct := OrderProduct{
 			OrderId:   orderinput.ID,
 			ProductId: item.ProductID,
 			Quantity:  item.Quantity,
-			Price:     item.Price,
+			Price:     productPrice.Price,
 		}
 		orderProducts = append(orderProducts, orderProduct)
 	}
@@ -126,7 +128,7 @@ func (oq *orderQuery) GetSellingHistory(userId uint) ([]order.Core, error) {
 
 	err := oq.db.Raw("SELECT o.id , o.buyer_id , u.name buyer_name , o.seller_id , u2.name seller_name , total_price , o.created_at , order_status FROM orders o JOIN users u ON o.buyer_id = u.id JOIN users u2 ON o.seller_id = u2.id WHERE o.seller_id = ?", userId).Scan(&orders).Error
 	if err != nil {
-		log.Println("error query select order hisoty: ", err.Error())
+		log.Println("error query select selling hisoty: ", err.Error())
 		return []order.Core{}, err
 	}
 
