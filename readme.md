@@ -131,7 +131,30 @@ $ git clone https://github.com/ALTA-Project3-Group6/ecommerceAPI-project
 ```
 $ cd ecommerceAPI-project
 ```
-# UNIT TEST COVERAGE
+
+# UNIT TEST COVERAGE BY FEATURE
+
+<div>
+- USER
+<img src="features/user/services/usercoverage.png">
+</div>
+
+<div>
+- PRODUCT
+<img src="features/product/services/productcoverage.png">
+</div>
+
+<div>
+- CART
+<img src="features/cart/services/cartcoverage.png">
+</div>
+
+<div>
+- ORDER
+<img src="features/order/services/ordercoverage.png">
+</div>
+
+# UNIT TEST COVERAGE ALL
 <img src="image/unittest.png">
 
 ## Authors 👑
