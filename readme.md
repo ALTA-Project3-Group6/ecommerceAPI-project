@@ -136,25 +136,29 @@ $ cd ecommerceAPI-project
 
 <div>
 - USER
-
+</div>
+<div>
 <img src="features/user/services/usercoverage.png">
 </div>
 
 <div>
 - PRODUCT
-
+</div>
+<div>
 <img src="features/product/services/productcoverage.png">
 </div>
 
 <div>
 - CART
-
+</div>
+<div>
 <img src="features/cart/services/cartcoverage.png">
 </div>
 
 <div>
 - ORDER
-
+</div>
+<div>
 <img src="features/order/services/ordercoverage.png">
 </div>
 
